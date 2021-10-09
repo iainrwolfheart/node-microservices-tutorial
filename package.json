@@ -1,0 +1,26 @@
+{
+  "name": "restaurant-microservice",
+  "version": "1.0.0",
+  "description": "Okta tutorial on Microservices using Node.js",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@okta/oidc-middleware": "^4.3.0",
+    "@okta/okta-sdk-nodejs": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "pug": "^3.0.2",
+    "seneca": "^3.24.0",
+    "seneca-web": "^2.2.1",
+    "seneca-web-adapter-express": "^1.2.1"
+  }
+}
