@@ -10,6 +10,7 @@ var ExpressOIDC = require("@okta/oidc-middleware").ExpressOIDC;
 var path = require("path");
 var bodyparser = require('body-parser');
 
+
 var senecaWebConfig = {
     context: Express(),
     adapter: require('seneca-web-adapter-express'),
@@ -23,6 +24,7 @@ seneca.use(Web, senecaWebConfig)
 .client({ port: '10203', pin: 'role:payment' })
 .client({ port: '10204', pin: 'role:order' });
 
+
 seneca.ready(() => {
     const app = seneca.export('web/context')();
 
@@ -34,3 +36,37 @@ seneca.ready(() => {
     app.set('views', path.join(__dirname, '../public/views'));
     app.set('view engine', 'pug');
 });
+
+const oktaSettings = {
+    clientId: process.env.OKTA_CLIENTID,
+    clientSecret: process.env.OKTA_CLIENTSECRET,
+    url: process.env.OKTA_URL_BASE,
+    appBaseUrl: process.env.OKTA_APP_BASE_URL
+};
+
+const oidc = new ExpressOIDC({
+    issuer: oktaSettings.url + '/oauth2/default',
+    client_id: oktaSettings.clientId,
+    client_secret: oktaSettings.clientSecret,
+    appBaseUrl: oktaSettings.appBaseUrl,
+    scope: 'openid profile',
+    routes: {
+        login: {
+            path: '/users/login'
+        },
+        callback: {
+            path: 'authorization-code/callback',
+            defaultRedirect: '/'
+        }
+    }
+});
+
+app.use(
+    session({
+        secret: "ladhnsfolnjaerovklnoisag093q4jgpijbfimdposjg5904mbgomcpasjdg'pomp;m",
+        resave: true,
+        saveUninitialized: false
+    })
+);
+
+app.use(oidc.router);
